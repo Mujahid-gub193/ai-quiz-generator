@@ -4,7 +4,10 @@ import { env } from "./env.js";
 const sequelize = env.supabaseDbUrl
   ? new Sequelize(env.supabaseDbUrl, {
       dialect: "postgres",
-      dialectOptions: { ssl: { require: true, rejectUnauthorized: false } },
+      dialectOptions: {
+        ssl: { require: true, rejectUnauthorized: false },
+        family: 4, // force IPv4
+      },
       logging: false,
     })
   : new Sequelize(env.dbName, env.dbUser, env.dbPassword, {
