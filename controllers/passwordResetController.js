@@ -5,7 +5,7 @@ import { env } from "../config/env.js";
 import { PasswordResetToken, User } from "../models/index.js";
 import ApiError from "../utils/apiError.js";
 
-const resend = new Resend(env.resendApiKey);
+const getResend = () => new Resend(env.resendApiKey || "placeholder");
 
 export const forgotPassword = async (req, res) => {
   const { email } = req.body;
@@ -25,7 +25,7 @@ export const forgotPassword = async (req, res) => {
 
   const resetUrl = `${env.appUrl}/reset-password?token=${token}`;
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: env.resendFrom,
     to: user.email,
     subject: "Reset your password — QuizPortal",
