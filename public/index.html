@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Quiz Generator Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Online Learning Portal</p>
+          <h1>Generate quizzes from your study materials and track your progress.</h1>
+          <p class="hero-text">
+            One workspace for notes, quiz creation, scoring, and review.
+          </p>
+        </div>
+        <div class="hero-badge">
+          <span class="badge-label">Backend</span>
+          <strong>Connected to Express + PostgreSQL</strong>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="panel auth-panel">
+          <div class="panel-header">
+            <h2>Account</h2>
+            <button id="logoutButton" class="ghost-button" type="button">Log Out</button>
+          </div>
+
+          <div id="authNotice" class="notice muted">Sign in or create an account to begin.</div>
+
+          <div class="auth-grid">
+            <form id="registerForm" class="stack">
+              <h3>Create account</h3>
+              <label>
+                <span>Name</span>
+                <input name="name" type="text" placeholder="Mujahid" required />
+              </label>
+              <label>
+                <span>Email</span>
+                <input name="email" type="email" placeholder="mujahid@example.com" required />
+              </label>
+              <label>
+                <span>Password</span>
+                <input name="password" type="password" placeholder="password123" required />
+              </label>
+              <button type="submit">Register</button>
+            </form>
+
+            <form id="loginForm" class="stack">
+              <h3>Login</h3>
+              <label>
+                <span>Email</span>
+                <input name="email" type="email" placeholder="mujahid@example.com" required />
+              </label>
+              <label>
+                <span>Password</span>
+                <input name="password" type="password" placeholder="password123" required />
+              </label>
+              <button type="submit">Login</button>
+            </form>
+          </div>
+        </section>
+
+        <section class="dashboard-grid">
+          <section class="panel">
+            <div class="panel-header">
+              <h2>Overview</h2>
+              <button id="refreshDashboardButton" class="ghost-button" type="button">Refresh</button>
+            </div>
+            <div id="statsGrid" class="stats-grid">
+              <article class="stat-card">
+                <span>Materials</span>
+                <strong>0</strong>
+              </article>
+              <article class="stat-card">
+                <span>Quizzes</span>
+                <strong>0</strong>
+              </article>
+              <article class="stat-card">
+                <span>Attempts</span>
+                <strong>0</strong>
+              </article>
+              <article class="stat-card">
+                <span>Average Score</span>
+                <strong>0%</strong>
+              </article>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-header">
+              <h2>Progress Snapshot</h2>
+            </div>
+            <div id="progressCharts" class="charts-grid">
+              <div class="empty-state">No attempt data yet.</div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-header">
+              <h2 id="materialFormTitle">Create Material</h2>
+              <button id="cancelEditButton" class="ghost-button" type="button" hidden>
+                Cancel Edit
+              </button>
+            </div>
+            <form id="materialForm" class="stack">
+              <label>
+                <span>Title</span>
+                <input name="title" type="text" placeholder="JavaScript Basics Note" required />
+              </label>
+              <label>
+                <span>Topic</span>
+                <input name="topic" type="text" placeholder="JavaScript Basics" required />
+              </label>
+              <label>
+                <span>Type</span>
+                <select name="type">
+                  <option value="note">Note</option>
+                  <option value="course">Course</option>
+                </select>
+              </label>
+              <label>
+                <span>Summary</span>
+                <input name="summary" type="text" placeholder="Short summary" />
+              </label>
+              <label>
+                <span>Content</span>
+                <textarea
+                  name="content"
+                  rows="7"
+                  placeholder="Paste your lesson or notes here..."
+                  required
+                ></textarea>
+              </label>
+              <button id="materialSubmitButton" type="submit">Save Material</button>
+            </form>
+          </section>
+
+          <section class="panel">
+            <div class="panel-header">
+              <h2>Generate Quiz</h2>
+            </div>
+            <form id="quizForm" class="stack">
+              <label>
+                <span>Quiz Title</span>
+                <input name="title" type="text" placeholder="JavaScript Basics Quiz" />
+              </label>
+              <label>
+                <span>Topic</span>
+                <input name="topic" type="text" placeholder="JavaScript Basics" required />
+              </label>
+              <label>
+                <span>Question Count</span>
+                <input name="questionCount" type="number" min="1" max="10" value="5" required />
+              </label>
+              <label>
+                <span>Select Material</span>
+                <select id="materialSelect" name="materialId">
+                  <option value="">Use direct text instead</option>
+                </select>
+              </label>
+              <label>
+                <span>Or provide direct text</span>
+                <textarea
+                  name="sourceText"
+                  rows="6"
+                  placeholder="Paste custom text if you do not want to use a saved material."
+                ></textarea>
+              </label>
+              <button type="submit">Generate Quiz</button>
+            </form>
+          </section>
+
+          <section class="panel">
+            <div class="panel-header">
+              <h2>Your Materials</h2>
+            </div>
+            <label>
+              <span>Search materials</span>
+              <input id="materialSearchInput" type="text" placeholder="Filter by title or topic" />
+            </label>
+            <div id="materialsList" class="list-grid empty-state">No materials yet.</div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-header">
+              <h2>Quiz Library</h2>
+            </div>
+            <label>
+              <span>Search quizzes</span>
+              <input id="quizSearchInput" type="text" placeholder="Filter by title, topic, or source" />
+            </label>
+            <div id="quizzesList" class="list-grid empty-state">No quizzes yet.</div>
+          </section>
+
+          <section class="panel wide-panel">
+            <div class="panel-header">
+              <h2>Latest Quiz</h2>
+            </div>
+            <div id="quizContainer" class="empty-state">Generate a quiz to see it here.</div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-header">
+              <h2>Recent Attempts</h2>
+            </div>
+            <div id="attemptsList" class="list-grid empty-state">No quiz attempts yet.</div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-header">
+              <h2>Attempt Detail</h2>
+            </div>
+            <div id="attemptDetail" class="empty-state">Select an attempt to inspect its answers.</div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-header">
+              <h2>Status</h2>
+            </div>
+            <div id="statusBoard" class="status-board">
+              <p class="status-line">Frontend ready.</p>
+            </div>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
