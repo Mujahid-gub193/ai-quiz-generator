@@ -23,6 +23,7 @@ export default function TeacherDashboard() {
   // Quiz gen form
   const [quizForm, setQuizForm] = useState({ title: "", topic: "", materialId: "", questionCount: 5 });
   const [generating, setGenerating] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     api.get("/materials").then(r => setMaterials(r.data.materials)).catch(() => {});
@@ -82,7 +83,9 @@ export default function TeacherDashboard() {
 
   return (
     <div style={s.page}>
-      <aside style={s.sidebar}>
+      <button className="sidebar-toggle" onClick={() => setSidebarOpen(o => !o)}>☰</button>
+      <div className={`sidebar-overlay${sidebarOpen ? " open" : ""}`} onClick={() => setSidebarOpen(false)} />
+      <aside className={`dashboard-sidebar${sidebarOpen ? " open" : ""}`} style={s.sidebar}>
         <div style={s.logo} onClick={() => navigate("/courses")} title="Browse Courses">🎓 QuizPortal</div>
         <div style={{ fontSize: 11, color: "#48bb78", cursor: "pointer", textAlign: "center", marginBottom: 8 }} onClick={() => navigate("/courses")}>🌐 Browse Courses</div>
         <div style={s.userInfo}>
@@ -107,7 +110,7 @@ export default function TeacherDashboard() {
         <button onClick={handleLogout} style={s.logoutBtn}>🚪 Sign Out</button>
       </aside>
 
-      <main style={s.main}>
+      <main className="dashboard-main" style={s.main}>
         {error && <div style={s.errorBanner}>{error}</div>}
         {msg && <div style={s.successBanner}>{msg}</div>}
 

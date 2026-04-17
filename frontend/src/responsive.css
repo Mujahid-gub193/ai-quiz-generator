@@ -1,0 +1,194 @@
+/* ── Global resets ── */
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; }
+img, video, iframe { max-width: 100%; }
+
+/* ══════════════════════════════════════
+   DASHBOARD LAYOUT (Student / Teacher / Admin)
+   Sidebar collapses on mobile
+══════════════════════════════════════ */
+
+/* Sidebar toggle button — hidden on desktop */
+.sidebar-toggle {
+  display: none;
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 300;
+  background: #1a1a2e;
+  border: none;
+  color: #fff;
+  font-size: 22px;
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  /* Show hamburger */
+  .sidebar-toggle { display: flex; }
+
+  /* Sidebar becomes a drawer */
+  .dashboard-sidebar {
+    position: fixed !important;
+    top: 0;
+    left: -260px;
+    height: 100vh;
+    z-index: 200;
+    transition: left 0.25s ease;
+    overflow-y: auto;
+    width: 240px !important;
+  }
+  .dashboard-sidebar.open { left: 0 !important; }
+
+  /* Overlay behind open sidebar */
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 199;
+  }
+  .sidebar-overlay.open { display: block; }
+
+  /* Main content takes full width */
+  .dashboard-main {
+    padding: 16px !important;
+    padding-top: 64px !important;
+    width: 100% !important;
+  }
+
+  /* Stats grid — 2 columns on mobile */
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Tables scroll horizontally */
+  .table-wrap { overflow-x: auto; }
+}
+
+/* ══════════════════════════════════════
+   COURSES PAGE
+══════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* Navbar */
+  .courses-nav-inner {
+    flex-wrap: wrap;
+    height: auto !important;
+    padding: 10px 16px !important;
+    gap: 10px !important;
+  }
+  .courses-nav-search { display: none !important; } /* hide desktop search in nav */
+  .courses-nav-right { gap: 6px !important; }
+
+  /* Hero */
+  .courses-hero { padding: 40px 16px !important; }
+  .courses-hero-content { flex-direction: column !important; gap: 32px !important; }
+  .courses-hero-title { font-size: 34px !important; }
+  .courses-hero-right { display: none !important; } /* hide illustration on mobile */
+  .courses-hero-search { flex-wrap: wrap; }
+
+  /* Grids */
+  .courses-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)) !important;
+    gap: 12px !important;
+  }
+  .courses-featured-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)) !important;
+    gap: 12px !important;
+  }
+
+  /* Section padding */
+  .courses-section { padding: 32px 16px !important; }
+  .courses-section-header { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; }
+
+  /* Footer */
+  .courses-footer-inner { flex-direction: column !important; gap: 24px !important; }
+  .courses-footer-links { flex-direction: column !important; gap: 20px !important; }
+}
+
+/* ══════════════════════════════════════
+   COURSE DETAIL PAGE
+══════════════════════════════════════ */
+@media (max-width: 900px) {
+  .detail-hero-inner {
+    flex-direction: column !important;
+  }
+  .detail-purchase-card {
+    width: 100% !important;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .detail-hero { padding: 28px 16px !important; }
+  .detail-title { font-size: 24px !important; }
+  .detail-content { padding: 24px 16px !important; }
+  .detail-nav-title { display: none !important; }
+}
+
+/* ══════════════════════════════════════
+   COURSE PLAYER PAGE
+══════════════════════════════════════ */
+@media (max-width: 768px) {
+  .player-body {
+    flex-direction: column !important;
+  }
+  .player-sidebar {
+    width: 100% !important;
+    height: auto !important;
+    max-height: 220px;
+    border-right: none !important;
+    border-bottom: 1px solid #eee;
+    overflow-y: auto;
+  }
+  .player-main {
+    padding: 16px !important;
+  }
+  .player-header {
+    flex-wrap: wrap;
+    height: auto !important;
+    padding: 10px 16px !important;
+    gap: 8px !important;
+  }
+  .player-progress-wrap { display: none !important; }
+}
+
+/* ══════════════════════════════════════
+   LOGIN PAGE
+══════════════════════════════════════ */
+@media (max-width: 480px) {
+  .login-card {
+    padding: 28px 20px !important;
+    margin: 16px !important;
+    border-radius: 12px !important;
+  }
+  .login-quick-row { flex-direction: column !important; }
+}
+
+/* ══════════════════════════════════════
+   TEACHER COURSE BUILDER
+══════════════════════════════════════ */
+@media (max-width: 768px) {
+  .builder-layout {
+    flex-direction: column !important;
+  }
+  .builder-sidebar {
+    width: 100% !important;
+    border-right: none !important;
+    border-bottom: 1px solid #eee;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+}
+
+/* ══════════════════════════════════════
+   UTILITY
+══════════════════════════════════════ */
+@media (max-width: 480px) {
+  .hide-mobile { display: none !important; }
+}

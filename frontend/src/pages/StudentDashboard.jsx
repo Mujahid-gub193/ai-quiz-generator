@@ -42,6 +42,7 @@ export default function StudentDashboard() {
   const [result, setResult] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     api.get("/dashboard/overview").then(r => setOverview(r.data)).catch(() => {});
@@ -90,7 +91,9 @@ export default function StudentDashboard() {
 
   return (
     <div style={s.page}>
-      <aside style={s.sidebar}>
+      <button className="sidebar-toggle" onClick={() => setSidebarOpen(o => !o)}>☰</button>
+      <div className={`sidebar-overlay${sidebarOpen ? " open" : ""}`} onClick={() => setSidebarOpen(false)} />
+      <aside className={`dashboard-sidebar${sidebarOpen ? " open" : ""}`} style={s.sidebar}>
         <div style={s.logo} onClick={() => navigate("/courses")} title="Browse Courses">🎓 QuizPortal</div>
         <div style={{ fontSize: 11, color: "#667eea", cursor: "pointer", textAlign: "center", marginBottom: 8 }} onClick={() => navigate("/courses")}>🌐 Browse Courses</div>
         <div style={s.userInfo}>
@@ -117,7 +120,7 @@ export default function StudentDashboard() {
         <button onClick={handleLogout} style={s.logoutBtn}>🚪 Sign Out</button>
       </aside>
 
-      <main style={s.main}>
+      <main className="dashboard-main" style={s.main}>
         {error && <div style={s.errorBanner}>{error}</div>}
 
         {/* OVERVIEW */}
