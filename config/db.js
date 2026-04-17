@@ -6,7 +6,12 @@ const sequelize = env.supabaseDbUrl
       dialect: "postgres",
       dialectOptions: {
         ssl: { require: true, rejectUnauthorized: false },
-        family: 4, // force IPv4
+        clientMinMessages: "notice",
+      },
+      hooks: {
+        beforeConnect: async (config) => {
+          config.family = 4;
+        },
       },
       logging: false,
     })
