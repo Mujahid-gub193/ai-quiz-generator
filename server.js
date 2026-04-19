@@ -9,13 +9,21 @@ const seedAdmin = async () => {
   const email = process.env.SEED_ADMIN_EMAIL;
   const password = process.env.SEED_ADMIN_PASSWORD;
   const name = process.env.SEED_ADMIN_NAME;
-  if (!email || !password || !name) return;
+
+  console.log(`seedAdmin: email=${email} password=${password ? "set" : "NOT SET"} name=${name}`);
+
+  if (!email || !password || !name) {
+    console.log("seedAdmin: skipping — env vars missing.");
+    return;
+  }
 
   const existing = await User.unscoped().findOne({ where: { email } });
   if (existing) {
     if (existing.role !== "admin") {
       await existing.update({ role: "admin" });
       console.log(`Promoted ${email} to admin.`);
+    } else {
+      console.log(`${email} is already admin.`);
     }
     return;
   }
