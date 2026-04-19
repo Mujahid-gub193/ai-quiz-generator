@@ -9,28 +9,18 @@ const seedAdmin = async () => {
   const email = process.env.SEED_ADMIN_EMAIL;
   const password = process.env.SEED_ADMIN_PASSWORD;
   const name = process.env.SEED_ADMIN_NAME;
-
-  console.log(`seedAdmin: email=${email} password=${password ? "set" : "NOT SET"} name=${name}`);
-
-  if (!email || !password || !name) {
-    console.log("seedAdmin: skipping — env vars missing.");
-    return;
-  }
-
-  const existing = await User.unscoped().findOne({ where: { email } });
-  if (existing) {
-    if (existing.role !== "admin") {
-      await existing.update({ role: "admin" });
-      console.log(`Promoted ${email} to admin.`);
-    } else {
-      console.log(`${email} is already admin.`);
-    }
-    return;
-  }
+  if (!email || !password || !name) return;
 
   const hashed = await bcrypt.hash(password, 10);
+  const existing = await User.unscoped().findOne({ where: { email } });
+  if (existing) {
+    await existing.update({ role: "admin", password: hashed });
+    console.log(`Admin synced: ${email}`);
+    return;
+  }
+
   await User.create({ name, email, password: hashed, role: "admin" });
-  console.log(`Admin account created: ${email}`);
+  console.log(`Admin created: ${email}`);
 };
 
 const startServer = async () => {
