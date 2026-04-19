@@ -6,6 +6,30 @@ export const listUsers = async (req, res) => {
   res.json({ count: users.length, users });
 };
 
+export const listTeacherRequests = async (req, res) => {
+  const users = await User.findAll({
+    where: { teacherRequest: "pending" },
+    order: [["createdAt", "DESC"]],
+  });
+  res.json({ count: users.length, users });
+};
+
+export const approveTeacherRequest = async (req, res) => {
+  const user = await User.findByPk(req.params.id);
+  if (!user) throw new ApiError(404, "User not found.");
+  if (user.teacherRequest !== "pending") throw new ApiError(400, "No pending request for this user.");
+  await user.update({ role: "teacher", teacherRequest: "none" });
+  res.json({ message: "Teacher request approved.", user });
+};
+
+export const rejectTeacherRequest = async (req, res) => {
+  const user = await User.findByPk(req.params.id);
+  if (!user) throw new ApiError(404, "User not found.");
+  if (user.teacherRequest !== "pending") throw new ApiError(400, "No pending request for this user.");
+  await user.update({ teacherRequest: "rejected" });
+  res.json({ message: "Teacher request rejected.", user });
+};
+
 export const updateUserRole = async (req, res) => {
   const { role } = req.body;
   const allowed = ["admin", "teacher", "student"];

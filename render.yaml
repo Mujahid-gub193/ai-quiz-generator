@@ -38,3 +38,9 @@ services:
         sync: false
       - key: CLOUDINARY_API_SECRET
         sync: false
+      - key: SEED_ADMIN_NAME
+        value: Mujahidul Islam
+      - key: SEED_ADMIN_EMAIL
+        value: mujahidulislam688@gmail.com
+      - key: SEED_ADMIN_PASSWORD
+        sync: false

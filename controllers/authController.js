@@ -34,11 +34,8 @@ const createToken = (user) =>
   });
 
 export const register = async (req, res) => {
-  const { name, email, password, role } = req.body;
+  const { name, email, password } = req.body;
   validateAuthPayload({ name, email, password }, true);
-
-  const allowedRoles = ["admin", "teacher", "student"];
-  const assignedRole = allowedRoles.includes(role) ? role : "student";
 
   const normalizedEmail = email.trim().toLowerCase();
   const existingUser = await User.unscoped().findOne({
@@ -54,7 +51,7 @@ export const register = async (req, res) => {
     name: name.trim(),
     email: normalizedEmail,
     password: hashedPassword,
-    role: assignedRole,
+    role: "student",
   });
 
   res.status(201).json({
@@ -94,4 +91,19 @@ export const getMe = async (req, res) => {
   res.json({
     user: formatUser(req.user),
   });
+};
+
+export const applyTeacher = async (req, res) => {
+  if (req.user.role !== "student") {
+    throw new ApiError(400, "Only students can apply to become a teacher.");
+  }
+
+  const user = await User.unscoped().findByPk(req.user.id);
+
+  if (user.teacherRequest === "pending") {
+    throw new ApiError(400, "You already have a pending teacher application.");
+  }
+
+  await user.update({ teacherRequest: "pending" });
+  res.json({ message: "Teacher application submitted. An admin will review it." });
 };

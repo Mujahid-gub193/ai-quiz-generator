@@ -31,6 +31,11 @@ const User = sequelize.define(
       allowNull: false,
       defaultValue: "student",
     },
+    teacherRequest: {
+      type: DataTypes.ENUM("none", "pending", "rejected"),
+      allowNull: false,
+      defaultValue: "none",
+    },
   },
   {
     defaultScope: {
